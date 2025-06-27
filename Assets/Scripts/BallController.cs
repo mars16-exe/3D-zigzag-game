@@ -58,4 +58,12 @@ public class BallController : MonoBehaviour
             SwitchDirection();
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Diamond"))
+        {
+            Destroy(other.gameObject);
+        }
+    }
 }
