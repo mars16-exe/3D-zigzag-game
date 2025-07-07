@@ -9,6 +9,7 @@ public class BallController : MonoBehaviour
     private bool firstTouched;
     [HideInInspector] public bool gameOver;
 
+    private ParticlePool particlePool;
     private Rigidbody rb;
 
     private void Awake()
@@ -22,6 +23,8 @@ public class BallController : MonoBehaviour
     {
         gameOver = false;
         firstTouched = false;
+
+        particlePool = GetComponent<ParticlePool>();
     }
 
     private void SwitchDirection()
@@ -64,6 +67,7 @@ public class BallController : MonoBehaviour
         if (other.gameObject.CompareTag("Diamond"))
         {
             Destroy(other.gameObject);
+            particlePool.PlayParticle(other.transform.position);
         }
     }
 }
