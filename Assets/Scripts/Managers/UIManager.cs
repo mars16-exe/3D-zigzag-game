@@ -2,14 +2,34 @@ using System;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI tapTEXT;
+    public TextMeshProUGUI score;
+    public TextMeshProUGUI highScore_One, highScore_Two;
+    
+    
     public GameObject topPanel;
+    public GameObject gameOverPanel;
     private Tweener blinkTween;
 
     private float defaultY_tapText, defaultY_topPanel;
+
+    public static UIManager Instance;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     private void Start()
     {
@@ -29,7 +49,7 @@ public class UIManager : MonoBehaviour
         blinkTween.Kill();
     }
 
-    public void tapTextRemove()
+    public void tapTextHide()
     {
         Sequence downSequence = DOTween.Sequence();
         
@@ -39,20 +59,39 @@ public class UIManager : MonoBehaviour
         downSequence.Play();
     }
 
-    public void tapTextRestore()
+    public void tapTextShow()
     {
         tapTEXT.transform.localPosition = Vector3.one * defaultY_tapText;
         tapTEXT.DOFade(1f, 0.2f);
     }
 
-    public void TopPanelRemove()
+    public void TopPanelHide()
     {
         topPanel.transform.DOMoveY(500f, 0.5f).SetAutoKill();
     }
 
-    public void TopPanelRestore()
+    public void TopPanelShow()
     {
         topPanel.transform.DOMoveY(defaultY_topPanel, 0.5f).SetAutoKill();
+    }
+
+    public void GameOverPanelShow()
+    {
+        gameOverPanel.transform.localScale = Vector3.zero;
+        gameOverPanel.SetActive(true);
+        
+        gameOverPanel.transform.DOScale(Vector3.one, 0.5f).SetAutoKill().SetEase(Ease.OutBounce);
+    }
+
+    public void GameOverPanelHide()
+    {
+        gameOverPanel.transform.DOScale(Vector3.zero, 0.5f).SetAutoKill().SetEase(Ease.InBounce);
+        gameOverPanel.SetActive(false);
+    }
+
+    public void RetryGame()
+    {
+        SceneManager.LoadScene(0);
     }
     
     
